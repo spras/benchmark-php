@@ -160,6 +160,7 @@ function test_benchmark($settings)
     test_string($result);
     test_loops($result);
     test_ifelse($result);
+    test_session($result);
 
     $result['benchmark']['calculation_total'] = timer_diff($timeStart) . ' sec.';
 
@@ -231,6 +232,16 @@ function test_ifelse(&$result, $count = 999999)
     $result['benchmark']['ifelse'] = timer_diff($timeStart) . ' sec.';
 }
 
+function test_session(&$result, $count = 999)
+{
+    $timeStart = microtime(true);
+    for ($i = 0; $i < $count; $i++) {
+        session_start();
+        session_write_close();
+    }
+    $result['benchmark']['session'] = timer_diff($timeStart) . ' sec.';
+}
+
 function test_mysql(&$result, $settings)
 {
     $timeStart = microtime(true);
@@ -293,6 +304,7 @@ function print_benchmark_result($data, $showServerName = true)
     $result .= '<tr><td>String</td><td>' . h($data['benchmark']['string']) . '</td></tr>';
     $result .= '<tr><td>Loops</td><td>' . h($data['benchmark']['loops']) . '</td></tr>';
     $result .= '<tr><td>If Else</td><td>' . h($data['benchmark']['ifelse']) . '</td></tr>';
+    $result .= '<tr><td>Session</td><td>' . h($data['benchmark']['session']) . '</td></tr>';
     $result .= '<tr class="even"><td>Calculation total</td><td>' . h($data['benchmark']['calculation_total']) . '</td></tr>';
     $result .= '</tbody>';
 
